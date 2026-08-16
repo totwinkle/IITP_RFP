@@ -64,7 +64,7 @@ class KordocCLI:
         compatibility_source: Path | str | None = None,
     ):
         env_command = os.environ.get("KORDOC_COMMAND")
-        runtime_dir = Path(__file__).resolve().parents[1] / "runtime"
+        runtime_dir = Path(__file__).resolve().parents[1] / "api" / "runtime"
         bundled_node = runtime_dir / "node"
         bundled_archive = runtime_dir / "node-v22.15.1-linux-x64.tar.xz"
         bundled_cli = runtime_dir / "node_modules" / "kordoc" / "dist" / "cli.js"

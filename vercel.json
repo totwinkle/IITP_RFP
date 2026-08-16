@@ -2,7 +2,7 @@
   "buildCommand": "bash build_runtime.sh",
   "functions": {
     "api/index.py": {
-      "includeFiles": "runtime/**"
+      "includeFiles": "api/runtime/**"
     }
   },
   "rewrites": [
