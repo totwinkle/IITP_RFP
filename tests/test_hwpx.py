@@ -79,11 +79,12 @@ class HwpxZipTests(unittest.TestCase):
 
     def test_default_command_prefers_bundled_runtime(self):
         root = Path(__file__).resolve().parents[1]
-        bundled_node = root / "runtime" / "node"
-        bundled_cli = root / "runtime" / "node_modules" / "kordoc" / "dist" / "cli.js"
-        if bundled_node.is_file() and bundled_cli.is_file():
+        bundled_archive = root / "api" / "kordoc-runtime.tar.xz"
+        if bundled_archive.is_file():
             adapter = KordocCLI()
-            self.assertEqual(adapter.command, [str(bundled_node), str(bundled_cli)])
+            self.assertEqual(Path(adapter.command[0]).name, "node")
+            self.assertTrue(Path(adapter.command[0]).is_file())
+            self.assertTrue(Path(adapter.command[1]).is_file())
 
 
 if __name__ == "__main__":
