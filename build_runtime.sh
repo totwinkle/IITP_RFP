@@ -11,3 +11,7 @@ if [[ ! -x "$NODE_BIN" ]]; then
   rmdir "$ROOT/runtime/bin"
   chmod +x "$NODE_BIN"
 fi
+
+# The project is served by a Python Function, but Vercel's legacy project
+# settings still expect an output directory after a custom build command.
+mkdir -p "$ROOT/public"
