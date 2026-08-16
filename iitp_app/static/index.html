@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="기술수요조사서에서 검증 가능한 IITP 기술기획보고서와 RFP를 생성합니다.">
+  <title>IITP Document Studio</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="IITP Document Studio 홈">
+      <span class="brand-mark">ID</span>
+      <span>IITP Document Studio</span>
+    </a>
+    <div class="local-badge"><span></span> Local-first</div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <p class="eyebrow">TECHNOLOGY PLANNING WORKSPACE</p>
+      <h1>수요를 근거로,<br><em>공모 가능한 문서</em>까지.</h1>
+      <p>HWPX 한 파일에서 기술기획보고서와 RFP를 단계적으로 작성합니다. 확정되지 않은 값은 채워 넣지 않고 질문으로 남깁니다.</p>
+    </section>
+
+    <nav class="stepper" aria-label="작성 단계">
+      <button class="step active" data-stage="upload"><b>01</b><span>수요 업로드<small>원본 HWPX</small></span></button>
+      <button class="step" data-stage="analysis"><b>02</b><span>분석·결정<small>근거와 공백</small></span></button>
+      <button class="step" data-stage="planning_review"><b>03</b><span>기획보고서<small>검토·확정</small></span></button>
+      <button class="step" data-stage="rfp_review"><b>04</b><span>RFP<small>검토·완료</small></span></button>
+    </nav>
+
+    <section id="alert" class="alert hidden" role="status"></section>
+
+    <section id="upload-panel" class="panel upload-panel">
+      <div>
+        <p class="section-label">START A PROJECT</p>
+        <h2>기술수요조사서 불러오기</h2>
+        <p class="muted">원본은 프로젝트별 로컬 폴더에 보존되며 SHA-256, 파일 크기, 변환 이력이 manifest에 기록됩니다.</p>
+      </div>
+      <label class="dropzone" id="dropzone">
+        <input id="file-input" type="file" accept=".hwpx,application/hwp+zip">
+        <span class="upload-icon">↥</span>
+        <strong>HWPX를 놓거나 클릭해 선택</strong>
+        <small>최대 50 MiB · 입력 내용은 외부로 전송하지 않습니다</small>
+        <span id="file-name" class="filename"></span>
+      </label>
+      <button id="upload-button" class="primary" disabled>분석 시작 <span>→</span></button>
+      <div class="resume-wrap">
+        <button id="resume-toggle" class="text-button">이전 로컬 프로젝트 열기</button>
+        <div id="project-list" class="project-list hidden"></div>
+      </div>
+    </section>
+
+    <section id="analysis-panel" class="panel hidden">
+      <div class="panel-head">
+        <div><p class="section-label">SOURCE ANALYSIS</p><h2>원문 근거와 결정 공백</h2></div>
+        <span class="status-chip amber">검토 필요</span>
+      </div>
+      <div id="field-grid" class="field-grid"></div>
+      <details class="mapping"><summary>항목별 정보 매핑 보기 <span>① 직접 근거 · ② 추가 조사 · ③ 담당자 판단</span></summary><div id="mapping-list"></div></details>
+      <div class="split">
+        <div>
+          <h3>담당자 결정</h3>
+          <p class="muted compact">영향도가 큰 질문 순서입니다. 빈 항목은 문서에 명시적인 placeholder로 남습니다.</p>
+          <div id="decision-list" class="decision-list"></div>
+        </div>
+        <div>
+          <h3>외부 근거 레지스트리</h3>
+          <p class="muted compact">확정 문장에 쓸 근거만 URL과 함께 ‘검증됨’으로 등록하세요.</p>
+          <div class="evidence-form">
+            <input id="ev-org" placeholder="출처기관">
+            <input id="ev-title" placeholder="자료명">
+            <input id="ev-date" placeholder="발표일">
+            <input id="ev-url" placeholder="https://…">
+            <input id="ev-claim" placeholder="이 근거가 뒷받침하는 주장">
+            <label><input id="ev-verified" type="checkbox"> 원문을 확인하여 검증됨</label>
+            <button id="add-evidence" class="secondary">근거 추가</button>
+          </div>
+          <div id="evidence-list"></div>
+        </div>
+      </div>
+      <div class="action-row"><button id="save-review" class="secondary">결정·근거 저장</button><button id="generate-planning" class="primary">기획보고서 초안 생성 <span>→</span></button></div>
+    </section>
+
+    <section id="planning-panel" class="panel hidden">
+      <div class="panel-head">
+        <div><p class="section-label">PLANNING REPORT</p><h2>기술기획보고서 검토</h2></div>
+        <span id="planning-status" class="status-chip amber">초안</span>
+      </div>
+      <p class="review-note"><b>확정 전 확인:</b> 입력 근거와 외부 근거를 구분했는지, 기간·예산·TRL·KPI의 미결정값이 남아 있는지 검토하세요.</p>
+      <textarea id="planning-editor" class="editor" spellcheck="false" aria-label="기술기획보고서 Markdown"></textarea>
+      <div id="planning-validation" class="validation hidden"></div>
+      <div class="action-row">
+        <button id="save-planning" class="secondary">수정사항 저장</button>
+        <a id="planning-download" class="download hidden" href="#">HWPX 다운로드</a>
+        <button id="confirm-planning" class="primary">확정하고 HWPX 생성 <span>✓</span></button>
+        <button id="generate-rfp" class="primary hidden">RFP 초안으로 전환 <span>→</span></button>
+      </div>
+    </section>
+
+    <section id="rfp-panel" class="panel hidden">
+      <div class="panel-head">
+        <div><p class="section-label">REQUEST FOR PROPOSAL</p><h2>RFP 검토</h2></div>
+        <span id="rfp-status" class="status-chip amber">초안</span>
+      </div>
+      <p class="review-note"><b>공모 관점 확인:</b> As-is/To-be, 필수 결과, 제안자 자율범위, 측정방법과 검증증적이 구분되어야 합니다.</p>
+      <textarea id="rfp-editor" class="editor" spellcheck="false" aria-label="RFP Markdown"></textarea>
+      <div id="rfp-validation" class="validation hidden"></div>
+      <div class="action-row">
+        <button id="save-rfp" class="secondary">수정사항 저장</button>
+        <a id="rfp-download" class="download hidden" href="#">HWPX 다운로드</a>
+        <a id="manifest-download" class="text-button hidden" target="_blank">Provenance manifest</a>
+        <button id="confirm-rfp" class="primary">확정하고 HWPX 생성 <span>✓</span></button>
+      </div>
+    </section>
+  </main>
+
+  <footer><span>Local workspace · Kordoc native HWPX</span><span>구조 검증 ≠ 시각적 동일성</span></footer>
+  <div id="busy" class="busy hidden" aria-live="polite"><div class="spinner"></div><strong id="busy-text">처리 중…</strong><small>Kordoc 변환과 검증에는 잠시 시간이 걸릴 수 있습니다.</small></div>
+  <script src="/app.js" defer></script>
+</body>
+</html>

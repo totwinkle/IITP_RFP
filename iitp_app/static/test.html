@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>IITP Document Studio · 테스트 랜딩</title>
+  <style>
+    :root{--navy:#13253f;--blue:#2458d5;--ink:#172033;--muted:#66738a;--line:#dfe5ef;--paper:#f7f9fd;--green:#14715b;--amber:#a26209}
+    *{box-sizing:border-box}body{margin:0;color:var(--ink);font-family:Inter,Pretendard,"Noto Sans KR",sans-serif;background:linear-gradient(145deg,#eaf1ff,#fbfaf7 55%,#eef8f3);min-height:100vh}
+    .wrap{max-width:1080px;margin:auto;padding:28px 22px 64px}.top{display:flex;justify-content:space-between;align-items:center}.brand{font-weight:800;color:var(--navy);letter-spacing:-.03em}.badge{font-size:12px;color:var(--green);background:#e3f5ef;border:1px solid #b8ddd3;border-radius:99px;padding:7px 12px}
+    .hero{padding:76px 0 48px;max-width:760px}.eyebrow{font-size:12px;letter-spacing:.16em;color:var(--blue);font-weight:800}.hero h1{font-size:clamp(40px,7vw,74px);line-height:1.04;letter-spacing:-.065em;color:var(--navy);margin:14px 0 20px}.hero h1 em{font-style:normal;color:var(--blue)}.hero p{font-size:17px;line-height:1.8;color:var(--muted);margin:0}.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}.btn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;border-radius:11px;padding:13px 19px;font-weight:700;font-size:13px}.primary{background:linear-gradient(135deg,var(--blue),#3b73ee);color:#fff;box-shadow:0 10px 22px #2458d52e}.secondary{background:#fff;color:var(--navy);border:1px solid #cdd7e7}.status{margin-top:22px;font-size:12px;color:var(--muted)}.status b{color:var(--amber)}.status.ok b{color:var(--green)}
+    .flow{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:20px 0 38px}.card{background:#ffffffd9;border:1px solid var(--line);border-radius:17px;padding:19px;min-height:132px;box-shadow:0 12px 36px #1930570c}.num{color:var(--blue);font-size:11px;font-weight:800;letter-spacing:.08em}.card h2{color:var(--navy);font-size:15px;margin:12px 0 7px}.card p{color:var(--muted);font-size:12px;line-height:1.6;margin:0}.section{margin-top:34px}.section h2{color:var(--navy);font-size:22px;letter-spacing:-.04em}.checks{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.check{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px;font-size:13px}.check span{display:inline-grid;place-items:center;width:19px;height:19px;border-radius:50%;background:#e3f5ef;color:var(--green);margin-right:8px;font-size:11px;font-weight:800}.note{margin-top:22px;padding:15px 17px;border-left:3px solid var(--blue);background:#f3f6fc;color:var(--muted);font-size:12px;line-height:1.7;border-radius:0 10px 10px 0}footer{margin-top:60px;color:#8993a3;font-size:11px;border-top:1px solid #dfe4eb;padding-top:18px}@media(max-width:760px){.flow{grid-template-columns:1fr 1fr}.checks{grid-template-columns:1fr}.hero{padding-top:54px}.top{align-items:flex-start;gap:12px}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="top"><div class="brand">IITP Document Studio</div><div class="badge">TEST LANDING PAGE</div></header>
+    <main>
+      <section class="hero">
+        <div class="eyebrow">LOCAL PRODUCT WALKTHROUGH</div>
+        <h1>수요조사서에서<br><em>공모 가능한 문서</em>까지.</h1>
+        <p>아래 버튼을 눌러 실제 웹앱으로 이동한 뒤, HWPX 기술수요조사서를 업로드하고 기술기획보고서와 RFP가 생성되는 전체 흐름을 직접 확인해 보세요.</p>
+        <div class="actions"><a class="btn primary" href="/">웹앱 테스트 시작 →</a><button class="btn secondary" id="health">서버 상태 확인</button></div>
+        <div class="status" id="status">서버 상태를 확인하려면 버튼을 눌러 주세요.</div>
+      </section>
+      <section class="flow" aria-label="테스트 흐름">
+        <div class="card"><div class="num">01</div><h2>HWPX 업로드</h2><p>기술수요조사서 원본을 선택합니다.</p></div>
+        <div class="card"><div class="num">02</div><h2>내용 분석</h2><p>Kordoc으로 본문과 구조를 분석합니다.</p></div>
+        <div class="card"><div class="num">03</div><h2>기획보고서</h2><p>초안을 검토·수정·확정합니다.</p></div>
+        <div class="card"><div class="num">04</div><h2>RFP</h2><p>확정된 기획을 RFP로 전환합니다.</p></div>
+        <div class="card"><div class="num">05</div><h2>HWPX 다운로드</h2><p>두 문서를 검증 후 다운로드합니다.</p></div>
+      </section>
+      <section class="section"><h2>이번 테스트에서 확인할 항목</h2><div class="checks"><div class="check"><span>✓</span>HWPX 업로드와 원본 분석</div><div class="check"><span>✓</span>분석 결과와 추가 결정사항 확인</div><div class="check"><span>✓</span>기술기획보고서 편집·확정</div><div class="check"><span>✓</span>RFP 편집·확정 및 HWPX 다운로드</div></div><div class="note">테스트용 입력 파일은 <strong>.hwpx</strong> 형식이어야 합니다. 업로드 후 각 단계에서 생성된 내용을 직접 확인하고, 필요하면 텍스트를 수정한 뒤 다음 단계로 진행할 수 있습니다.</div></section>
+    </main>
+    <footer>현재는 테스트용 로컬 랜딩 페이지입니다. GitHub 업로드와 Vercel 배포는 별도 승인 후 진행합니다.</footer>
+  </div>
+  <script>
+    document.getElementById('health').addEventListener('click', async () => {
+      const el=document.getElementById('status'); el.textContent='서버 상태를 확인하는 중입니다…';
+      try { const r=await fetch('/api/health'); const d=await r.json(); if(!r.ok) throw new Error('HTTP '+r.status); el.className='status ok'; el.innerHTML='<b>정상</b> · '+d.service+' 응답 확인'; }
+      catch(e){ el.className='status'; el.innerHTML='<b>확인 실패</b> · 웹앱 서버가 실행 중인지 확인해 주세요.'; }
+    });
+  </script>
+</body>
+</html>
