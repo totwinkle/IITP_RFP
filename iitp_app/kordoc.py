@@ -3,6 +3,8 @@ from __future__ import annotations
 import json
 import os
 import subprocess
+import tarfile
+import tempfile
 import zipfile
 from copy import copy
 from pathlib import Path
@@ -62,8 +64,23 @@ class KordocCLI:
         compatibility_source: Path | str | None = None,
     ):
         env_command = os.environ.get("KORDOC_COMMAND")
-        bundled_node = Path(__file__).resolve().parents[1] / "runtime" / "node"
-        bundled_cli = Path(__file__).resolve().parents[1] / "runtime" / "node_modules" / "kordoc" / "dist" / "cli.js"
+        runtime_dir = Path(__file__).resolve().parents[1] / "runtime"
+        bundled_node = runtime_dir / "node"
+        bundled_archive = runtime_dir / "node-v22.15.1-linux-x64.tar.xz"
+        bundled_cli = runtime_dir / "node_modules" / "kordoc" / "dist" / "cli.js"
+        if not bundled_node.is_file() and bundled_archive.is_file():
+            cache_node = Path(tempfile.gettempdir()) / "iitp-kordoc-node-v22.15.1"
+            if not cache_node.is_file():
+                member_name = "node-v22.15.1-linux-x64/bin/node"
+                with tarfile.open(bundled_archive, mode="r:xz") as archive:
+                    extracted = archive.extractfile(member_name)
+                    if extracted is None:
+                        raise KordocError(f"번들 Node 실행 파일을 찾을 수 없습니다: {member_name}")
+                    temporary = cache_node.with_suffix(".tmp")
+                    temporary.write_bytes(extracted.read())
+                    temporary.chmod(0o755)
+                    temporary.replace(cache_node)
+            bundled_node = cache_node
         if command:
             default_command = list(command)
         elif env_command:
