@@ -1,5 +1,10 @@
 {
   "buildCommand": "bash build_runtime.sh",
+  "functions": {
+    "api/index.py": {
+      "includeFiles": ["runtime/**"]
+    }
+  },
   "rewrites": [
     { "source": "/(.*)", "destination": "/api/index.py" }
   ]
