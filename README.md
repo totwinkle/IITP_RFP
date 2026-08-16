@@ -132,7 +132,7 @@ E2E는 업로드·파싱 → 기획 초안 → 기획 확정/HWPX 검증 → RFP
 
 ## Vercel 배포 런타임
 
-Vercel Python Function에는 `npx`가 제공되지 않으므로 Kordoc CLI를 실행할 Node.js 런타임과 Kordoc npm 의존성을 `api/runtime/`에 번들합니다. `iitp_app.kordoc.KordocCLI`는 `api/runtime/node`와 `api/runtime/node_modules/kordoc/dist/cli.js`가 있으면 이를 우선 사용하고, 로컬 개발 환경에서는 `KORDOC_COMMAND` 또는 `npx` fallback을 사용할 수 있습니다. PDF/OCR용 선택적 의존성은 Vercel 함수 크기를 줄이기 위해 제외되어 HWPX 파싱·생성·검증·왕복·렌더링 경로를 대상으로 합니다.
+Vercel Python Function에는 `npx`가 제공되지 않으므로 Kordoc CLI를 실행할 Node.js 런타임과 Kordoc npm 의존성을 `api/kordoc-runtime.tar.xz`에 번들합니다. `KordocCLI`는 아카이브를 `/tmp/iitp-kordoc-runtime`에 해제해 Node와 Kordoc CLI를 실행하고, 로컬 개발 환경에서는 `KORDOC_COMMAND` 또는 `npx` fallback을 사용할 수 있습니다. PDF/OCR용 선택적 의존성은 Vercel 함수 크기를 줄이기 위해 제외되어 HWPX 파싱·생성·검증·왕복·렌더링 경로를 대상으로 합니다.
 
 ## 적용한 프로젝트 규칙
 

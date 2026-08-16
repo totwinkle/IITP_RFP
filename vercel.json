@@ -2,7 +2,7 @@
   "buildCommand": "bash build_runtime.sh",
   "functions": {
     "api/index.py": {
-      "includeFiles": "api/runtime/**"
+      "includeFiles": "api/kordoc-runtime.tar.xz"
     }
   },
   "rewrites": [

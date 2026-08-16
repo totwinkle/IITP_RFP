@@ -64,23 +64,24 @@ class KordocCLI:
         compatibility_source: Path | str | None = None,
     ):
         env_command = os.environ.get("KORDOC_COMMAND")
-        runtime_dir = Path(__file__).resolve().parents[1] / "api" / "runtime"
-        bundled_node = runtime_dir / "node"
-        bundled_archive = runtime_dir / "node-v22.15.1-linux-x64.tar.xz"
-        bundled_cli = runtime_dir / "node_modules" / "kordoc" / "dist" / "cli.js"
-        if not bundled_node.is_file() and bundled_archive.is_file():
-            cache_node = Path(tempfile.gettempdir()) / "iitp-kordoc-node-v22.15.1"
-            if not cache_node.is_file():
-                member_name = "node-v22.15.1-linux-x64/bin/node"
-                with tarfile.open(bundled_archive, mode="r:xz") as archive:
-                    extracted = archive.extractfile(member_name)
-                    if extracted is None:
-                        raise KordocError(f"번들 Node 실행 파일을 찾을 수 없습니다: {member_name}")
-                    temporary = cache_node.with_suffix(".tmp")
-                    temporary.write_bytes(extracted.read())
-                    temporary.chmod(0o755)
-                    temporary.replace(cache_node)
-            bundled_node = cache_node
+        runtime_dir = Path(__file__).resolve().parents[1] / "api"
+        bundled_archive = runtime_dir / "kordoc-runtime.tar.xz"
+        cache_dir = Path(tempfile.gettempdir()) / "iitp-kordoc-runtime"
+        bundled_node = cache_dir / "node"
+        bundled_cli = cache_dir / "node_modules" / "kordoc" / "dist" / "cli.js"
+        if bundled_archive.is_file() and not (bundled_node.is_file() and bundled_cli.is_file()):
+            temporary_dir = cache_dir.with_name(cache_dir.name + ".tmp")
+            if temporary_dir.exists():
+                import shutil
+                shutil.rmtree(temporary_dir)
+            temporary_dir.mkdir(parents=True)
+            with tarfile.open(bundled_archive, mode="r:xz") as archive:
+                archive.extractall(temporary_dir, filter="data")
+            (temporary_dir / "node").chmod(0o755)
+            if cache_dir.exists():
+                import shutil
+                shutil.rmtree(cache_dir)
+            temporary_dir.replace(cache_dir)
         if command:
             default_command = list(command)
         elif env_command:

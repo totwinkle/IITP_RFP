@@ -5,4 +5,3 @@ data/
 e2e-data/
 .coverage
 .vercel
-api/runtime/node
