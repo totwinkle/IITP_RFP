@@ -4,4 +4,5 @@ __pycache__/
 data/
 e2e-data/
 .coverage
-
+.vercel
+runtime/node

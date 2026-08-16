@@ -130,6 +130,10 @@ E2E는 업로드·파싱 → 기획 초안 → 기획 확정/HWPX 검증 → RFP
 - 브라우저 UI는 Markdown 텍스트 편집기입니다. 표 단위 WYSIWYG 편집과 다중 사용자 협업은 MVP 범위 밖입니다.
 - Kordoc 생성본에 `settings.xml`, `version.xml`, `META-INF/manifest.xml`이 없고 known-good 원본도 없으면 API는 `422`와 `completed=false`를 반환합니다. 호환성 보강 후 ZIP·validate·왕복·render 전체 게이트를 다시 통과해야 확정됩니다.
 
+## Vercel 배포 런타임
+
+Vercel Python Function에는 `npx`가 제공되지 않으므로 Kordoc CLI를 실행할 Node.js 런타임과 Kordoc npm 의존성을 `runtime/`에 번들합니다. `iitp_app.kordoc.KordocCLI`는 `runtime/node`와 `runtime/node_modules/kordoc/dist/cli.js`가 있으면 이를 우선 사용하고, 로컬 개발 환경에서는 `KORDOC_COMMAND` 또는 `npx` fallback을 사용할 수 있습니다. PDF/OCR용 선택적 의존성은 Vercel 함수 크기를 줄이기 위해 제외되어 HWPX 파싱·생성·검증·왕복·렌더링 경로를 대상으로 합니다.
+
 ## 적용한 프로젝트 규칙
 
 구현은 저장소 외부의 지정 자료를 읽고 다음 원칙을 반영했습니다: 원문 우선, 양식/내용 분리, ①·②·③ 정보 매핑, 담당자 결정 우선, 미결정 수치 placeholder, 기획→RFP 의미 변환, native Kordoc 생성, ZIP·validate·왕복·render 완료 게이트. 샘플 고유 기술·정책·수치·기관은 재사용하지 않습니다.

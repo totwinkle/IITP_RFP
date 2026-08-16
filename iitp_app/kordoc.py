@@ -62,9 +62,19 @@ class KordocCLI:
         compatibility_source: Path | str | None = None,
     ):
         env_command = os.environ.get("KORDOC_COMMAND")
-        self.command = list(command or (env_command.split() if env_command else [
-            "npx", "--yes", "--package", "kordoc", "--package", "pdfjs-dist", "kordoc"
-        ]))
+        bundled_node = Path(__file__).resolve().parents[1] / "runtime" / "node"
+        bundled_cli = Path(__file__).resolve().parents[1] / "runtime" / "node_modules" / "kordoc" / "dist" / "cli.js"
+        if command:
+            default_command = list(command)
+        elif env_command:
+            default_command = env_command.split()
+        elif bundled_node.is_file() and bundled_cli.is_file():
+            default_command = [str(bundled_node), str(bundled_cli)]
+        else:
+            default_command = [
+                "npx", "--yes", "--package", "kordoc", "--package", "pdfjs-dist", "kordoc"
+            ]
+        self.command = default_command
         self.timeout = timeout
         configured_source = compatibility_source or os.environ.get("IITP_HWPX_COMPATIBILITY_SOURCE")
         self.compatibility_source = Path(configured_source).expanduser() if configured_source else None

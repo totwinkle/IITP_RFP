@@ -77,5 +77,14 @@ class HwpxZipTests(unittest.TestCase):
             self.assertEqual([call[0] for call in adapter.calls], ["generate", "validate", str(output), "render"])
 
 
+    def test_default_command_prefers_bundled_runtime(self):
+        root = Path(__file__).resolve().parents[1]
+        bundled_node = root / "runtime" / "node"
+        bundled_cli = root / "runtime" / "node_modules" / "kordoc" / "dist" / "cli.js"
+        if bundled_node.is_file() and bundled_cli.is_file():
+            adapter = KordocCLI()
+            self.assertEqual(adapter.command, [str(bundled_node), str(bundled_cli)])
+
+
 if __name__ == "__main__":
     unittest.main()

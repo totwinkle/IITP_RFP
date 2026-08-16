@@ -1,4 +1,5 @@
 {
+  "buildCommand": "bash build_runtime.sh",
   "rewrites": [
     { "source": "/(.*)", "destination": "/api/index.py" }
   ]
